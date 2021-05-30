@@ -1,3 +1,4 @@
+require('dotenv').config()
 import express from 'express'
 import getChannel from './repositories/channels'
 const app = express()
@@ -11,6 +12,7 @@ app.get('/', async (_, response) => {
 
 app.get('/:channel', async (request, response) => {
   const information = await getChannel(request.params.channel)
+  if (!information) return response.json({ error: 'Not Found' })
   return response.json(information)
 })
 

@@ -49,43 +49,50 @@ var got_1 = __importDefault(require("got"));
 var utils_1 = require("../utils");
 var getChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
     var JSDOM, currentDay, itemCount, list, url, page, content, channelName, time_1, allItems, category_1, error_1;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
                 JSDOM = jsdom_1.default.JSDOM;
                 itemCount = 0;
                 list = [];
                 url = "https://meuguia.tv/programacao/canal/" + channel;
-                _b.label = 1;
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, got_1.default(url)];
             case 2:
-                page = _b.sent();
+                page = _a.sent();
                 content = new JSDOM(page.body);
-                channelName = utils_1.titleFormat(content.window.document.title);
-                time_1 = __spreadArray([], content.window.document.querySelectorAll('.lileft'));
-                allItems = __spreadArray([], content.window.document.querySelectorAll('.mw > li'));
-                category_1 = __spreadArray([], content.window.document.querySelectorAll('.licontent > h3'));
-                allItems.forEach(function (element) {
-                    if (element.classList.value === 'divider')
-                        return;
-                    if (element.classList.value === 'subheader devicepadding') {
-                        currentDay = element.innerHTML;
-                        return;
-                    }
-                    list.push({
-                        date: currentDay,
-                        time: time_1[itemCount].innerHTML,
-                        name: element.children[0].title,
-                        category: category_1[itemCount].innerHTML,
+                channelName = utils_1.titleFormat(content.window.document.title) || 'not found';
+                if (channelName !== 'not found') {
+                    time_1 = __spreadArray([], content.window.document.querySelectorAll('.lileft'));
+                    allItems = __spreadArray([], content.window.document.querySelectorAll('.mw > li'));
+                    category_1 = __spreadArray([], content.window.document.querySelectorAll('.licontent > h3'));
+                    allItems.forEach(function (element) {
+                        if (element.classList.value === 'divider')
+                            return;
+                        if (element.classList.value === 'subheader devicepadding') {
+                            currentDay = element.innerHTML;
+                            return;
+                        }
+                        list.push({
+                            date: currentDay + " - " + time_1[itemCount].innerHTML,
+                            formattedDate: utils_1.renderDate(currentDay, time_1[itemCount].innerHTML),
+                            name: element.children[0].title,
+                            category: category_1[itemCount].innerHTML,
+                        });
+                        itemCount++;
                     });
-                    itemCount++;
-                });
-                return [2 /*return*/, (_a = {}, _a[channelName] = list, _a)];
+                }
+                if (itemCount === 0)
+                    return [2 /*return*/, { error: 'Channel not found' }];
+                return [2 /*return*/, {
+                        name: channelName,
+                        guide: list,
+                        updatedAt: new Date(),
+                    }];
             case 3:
-                error_1 = _b.sent();
+                error_1 = _a.sent();
                 console.error(error_1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];

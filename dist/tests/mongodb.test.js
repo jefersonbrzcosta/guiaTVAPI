@@ -40,30 +40,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
-var express_1 = __importDefault(require("express"));
-var channels_1 = __importDefault(require("./repositories/channels"));
-var app = express_1.default();
-app.get('/', function (_, response) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, response.json({
-                instructions: 'Welcome to the channel guide API for brazil. Please visit the website https://meuguia.tv/ to check the channel url you should use. Just enter the end url from channel to get API response.',
-            })];
-    });
-}); });
-app.get('/:channel', function (request, response) { return __awaiter(void 0, void 0, void 0, function () {
-    var information;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, channels_1.default(request.params.channel)];
-            case 1:
-                information = _a.sent();
-                if (!information)
-                    return [2 /*return*/, response.json({ error: 'Not Found' })];
-                return [2 /*return*/, response.json(information)];
-        }
-    });
-}); });
-var port = process.env.PORT || 3333;
-app.listen(port, function () {
-    return console.log("Server running on port http://localhost:" + port);
+var assert_1 = __importDefault(require("assert"));
+var mongodb_1 = __importDefault(require("../database/strategies/mongodb"));
+var contextStrategy_1 = __importDefault(require("../database/strategies/base/contextStrategy"));
+var context = new contextStrategy_1.default(new mongodb_1.default());
+describe('MongoDB Test Suite', function () {
+    var _this = this;
+    this.beforeAll(function () { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, context.connect()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); }),
+        it('should connect to the database'),
+        function () { return __awaiter(_this, void 0, void 0, function () {
+            var result, expected;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('it test');
+                        return [4 /*yield*/, context.isConnect()];
+                    case 1:
+                        result = _a.sent();
+                        console.log(result);
+                        expected = 'connected';
+                        assert_1.default.deepStrictEqual(result, expected);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
 });

@@ -20,4 +20,10 @@ export default class ICrud {
   delete(id) {
     throw new NotImplemented()
   }
+  isConnect() {
+    throw new NotImplemented()
+  }
+  connect() {
+    throw new NotImplemented()
+  }
 }

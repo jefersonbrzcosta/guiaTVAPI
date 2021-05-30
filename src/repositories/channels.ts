@@ -1,11 +1,11 @@
 import jsdom from 'jsdom'
 import got from 'got'
 
-import { titleFormat } from '../utils'
+import { titleFormat, renderDate } from '../utils'
 
 interface results {
   date: string
-  time: string
+  formattedDate: string
   name: string
   category: string
 }
@@ -34,8 +34,8 @@ const getChannel = async (channel: string) => {
           return
         }
         list.push({
-          date: currentDay,
-          time: time[itemCount].innerHTML,
+          date: `${currentDay} - ${time[itemCount].innerHTML}`,
+          formattedDate: renderDate(currentDay, time[itemCount].innerHTML),
           name: element.children[0].title,
           category: category[itemCount].innerHTML,
         })
@@ -43,7 +43,12 @@ const getChannel = async (channel: string) => {
       })
     }
 
-    return { [channelName]: list }
+    if (itemCount === 0) return { error: 'Channel not found' }
+    return {
+      name: channelName,
+      guide: list,
+      updatedAt: new Date(),
+    }
   } catch (error) {
     console.error(error)
   }
