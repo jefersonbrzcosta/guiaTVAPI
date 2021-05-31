@@ -5,12 +5,12 @@ import { titleFormat, renderDate } from '../utils'
 
 interface results {
   date: string
-  formattedDate: string
+  formattedDate: Date
   name: string
   category: string
 }
 
-const getChannel = async (channel: string) => {
+const dataScraping = async (channel: string) => {
   const { JSDOM } = jsdom
   let currentDay: string
   let itemCount = 0
@@ -43,7 +43,6 @@ const getChannel = async (channel: string) => {
       })
     }
 
-    if (itemCount === 0) return { error: 'Channel not found' }
     return {
       name: channelName,
       guide: list,
@@ -54,4 +53,4 @@ const getChannel = async (channel: string) => {
   }
 }
 
-export default getChannel
+export default dataScraping

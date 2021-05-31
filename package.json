@@ -5,11 +5,11 @@
   "license": "MIT",
   "scripts": {
     "build-ts": "npm test && tsc",
-    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/database/strategy.ts",
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "postinstall": "npm run build-ts",
     "start": "npm run serve",
     "serve": "node dist/server.js",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/*.test.ts'"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/*.test.ts'"
   },
   "dependencies": {
     "dotenv": "^10.0.0",

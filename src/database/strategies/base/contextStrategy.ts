@@ -1,6 +1,9 @@
-export default class ContextStrategy {
+import ICrud from './interfaceICrud'
+
+export default class ContextStrategy extends ICrud {
   _database: any
   constructor(strategy) {
+    super()
     this._database = strategy
   }
 
