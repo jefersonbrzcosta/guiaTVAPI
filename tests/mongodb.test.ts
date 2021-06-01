@@ -6,7 +6,15 @@ import channelsSchema from '../src/database/strategies/mongodb/schemas/channelsS
 
 let context: any = {}
 
+const channelTest = {
+  name: 'AMC',
+  url: 'mgm',
+  guide: [],
+  updatedAt: new Date(),
+}
+
 describe('MongoDB Test Suite', function () {
+  this.timeout(Infinity)
   this.beforeAll(async () => {
     const connection = MongoDB.connect()
     context = new ContextStrategy(new MongoDB(connection, channelsSchema))
@@ -16,4 +24,8 @@ describe('MongoDB Test Suite', function () {
       const expected = 'connected'
       assert.deepStrictEqual(result, expected)
     })
+  it('should create item in the database', async () => {
+    const result = await context.create(channelTest)
+    assert.deepStrictEqual(result.name, channelTest.name)
+  })
 })

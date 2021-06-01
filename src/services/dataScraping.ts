@@ -45,6 +45,7 @@ const dataScraping = async (channel: string) => {
 
     return {
       name: channelName,
+      url: channel,
       guide: list,
       updatedAt: new Date(),
     }

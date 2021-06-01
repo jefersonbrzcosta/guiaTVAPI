@@ -23,11 +23,13 @@ const channelSchema: Schema = new Schema(
 )
 
 const schema = new Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  url: { type: String, required: true, unique: true },
   guide: { type: [channelSchema], required: true },
   updatedAt: { type: Date, default: new Date() },
 })
 
-const channelsSchema = Mongoose.model('channels', schema)
+const channelsSchema =
+  Mongoose.models.channels || Mongoose.model('channels', schema)
 
 export default channelsSchema

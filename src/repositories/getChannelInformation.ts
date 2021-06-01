@@ -1,9 +1,10 @@
 import dataScraping from '../services/dataScraping'
-import MongoDB from '../database/strategies/mongodb/mongodb'
-import ContextStrategy from '../database/strategies/base/contextStrategy'
 
-const getChannelInformation = async (channel: string) => {
+const getChannelInformation = async (channel: string, database: any) => {
   const information = await dataScraping(channel)
+  if (!information) return false
+  const results = await database.create(information)
+  return results
 }
 
 export default getChannelInformation

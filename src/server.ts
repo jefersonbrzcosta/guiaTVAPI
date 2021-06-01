@@ -1,11 +1,11 @@
 require('dotenv').config()
 import express from 'express'
-import dataScraping from './services/dataScraping'
-const app = express()
-
+import getChannelInformation from './repositories/getChannelInformation'
 import MongoDB from './database/strategies/mongodb/mongodb'
 import ContextStrategy from './database/strategies/base/contextStrategy'
 import channelsSchema from './database/strategies/mongodb/schemas/channelsSchema'
+
+const app = express()
 
 const connection = MongoDB.connect()
 const database = new ContextStrategy(new MongoDB(connection, channelsSchema))
@@ -18,7 +18,10 @@ app.get('/', async (_, response) => {
 })
 
 app.get('/:channel', async (request, response) => {
-  const information = await dataScraping(request.params.channel)
+  const information = await getChannelInformation(
+    request.params.channel,
+    database
+  )
   if (!information) return response.json({ error: 'Not Found' })
   return response.json(information)
 })

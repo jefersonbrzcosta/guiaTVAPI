@@ -23,7 +23,4 @@ export default class ICrud {
   isConnect() {
     throw new NotImplemented()
   }
-  connect() {
-    throw new NotImplemented()
-  }
 }

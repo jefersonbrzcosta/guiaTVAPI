@@ -1,5 +1,5 @@
 import ICrud from '../base/interfaceICrud'
-import Mongoose, { Schema } from 'mongoose'
+import Mongoose from 'mongoose'
 const DB_STATUS = {
   0: 'disconnected',
   1: 'connecting',
@@ -17,12 +17,9 @@ export default class MongoDB extends ICrud {
   }
   async isConnect() {
     const state = DB_STATUS[this._connection.readyState]
-    console.log(state)
     if (state === 'connected') return state
-    if (state !== 'connecting') return state
     if (state === 'connecting') {
       await new Promise((resolve) => setTimeout(resolve, 1000))
-
       return DB_STATUS[this._connection.readyState]
     }
   }
